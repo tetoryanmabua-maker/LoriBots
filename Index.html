@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>LoriBots – Botswana's Smartest Trucking Network</title>
+  <script>/* Prevent theme flash on load */
+(function(){var t=localStorage.getItem('lb-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    /* ── LANDING-SPECIFIC STYLES ── */
+    body { overflow: auto; }
+    .lnav { display: flex; align-items: center; justify-content: space-between; padding: .75rem 2rem; border-bottom: 1px solid var(--border); background: var(--panel); position: sticky; top: 0; z-index: 60; }
+    .logo { font-family: 'Syne', sans-serif; font-size: 1.35rem; font-weight: 800; color: var(--acc); }
+    .logo em { color: var(--sub); font-style: normal; font-size: .75rem; font-weight: 400; margin-left: .15rem; }
+    .hero { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 2.5rem; padding: 2.5rem 2rem 2rem; max-width: 1050px; margin: 0 auto; width: 100%; }
+    @media(max-width:740px){ .hero { grid-template-columns: 1fr; padding: 1.5rem 1rem; } }
+    .eyebrow { font-size: .65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--acc); font-weight: 700; margin-bottom: .65rem; display: flex; align-items: center; gap: .4rem; }
+    .eyebrow::before { content: ''; width: 20px; height: 2px; background: var(--acc); border-radius: 1px; display: inline-block; }
+    .h1 { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem,3.5vw,3rem); font-weight: 800; line-height: 1.1; margin-bottom: .7rem; }
+    .h1 em { color: var(--acc); font-style: normal; }
+    .heroP { color: var(--sub); font-size: .82rem; line-height: 1.65; margin-bottom: 1.2rem; max-width: 420px; }
+    .hacts { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .ecards { display: flex; flex-direction: column; gap: .5rem; }
+    .ecard { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: .85rem 1rem; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: .85rem; }
+    .ecard:hover { border-color: var(--acc); transform: translateX(3px); box-shadow: var(--sh); }
+    .eico { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .ea { background: var(--abg); } .eb { background: var(--bbg); } .ec { background: var(--surface); }
+    .etxt h4 { font-size: .82rem; font-weight: 600; margin-bottom: .1rem; }
+    .etxt p   { font-size: .7rem; color: var(--sub); line-height: 1.35; }
+    .earr { margin-left: auto; color: var(--faint); transition: transform .2s; }
+    .ecard:hover .earr { transform: translateX(3px); color: var(--acc); }
+    .mbar   { border-top: 1px solid var(--border); background: var(--panel); }
+    .minner { display: flex; justify-content: space-around; padding: .6rem 2rem; max-width: 1050px; margin: 0 auto; flex-wrap: wrap; gap: .4rem; }
+    .met { text-align: center; padding: .2rem .6rem; }
+    .met strong { display: block; font-family: 'Syne', sans-serif; font-size: 1.2rem; color: var(--acc); }
+    .met span   { font-size: .65rem; color: var(--sub); }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     LANDING PAGE
+══════════════════════════════════════ -->
+<nav class="lnav">
+  <div class="logo">LoriBots <em>Platform</em></div>
+  <div class="flex ac gap1">
+    <button class="thbtn" onclick="toggleTheme()">🌙 Dark Mode</button>
+    <button class="btn bgh bsm" onclick="openAuth('login')">Login</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div>
+    <div class="eyebrow">🇧🇼 Botswana's Professional Logistics Network</div>
+    <h1 class="h1">Connecting Loads.<br/><em>Moving</em> Botswana.</h1>
+    <p class="heroP">The freight marketplace linking verified cargo owners with trusted truck operators across every city in Botswana — GPS-tracked, Stripe-secured, and dispute-protected.</p>
+    <div class="hacts">
+      <button class="btn ba blg" onclick="openAuth('register','owner')">📦 Post a Load</button>
+      <button class="btn bgh blg" onclick="openAuth('register','driver')">🚛 Drive &amp; Earn</button>
+    </div>
+  </div>
+  <div>
+    <div class="ecards">
+      <div class="xs mu b" style="text-transform:uppercase;letter-spacing:.6px;margin-bottom:.2rem;">Sign up as</div>
+      <div class="ecard" onclick="openAuth('register','owner')">
+        <div class="eico ea">📦</div>
+        <div class="etxt"><h4>Cargo Owner</h4><p>Post loads, receive bids, track live &amp; pay via Stripe</p></div>
+        <div class="earr">›</div>
+      </div>
+      <div class="ecard" onclick="openAuth('register','driver')">
+        <div class="eico eb">🚛</div>
+        <div class="etxt"><h4>Truck Driver</h4><p>Browse jobs, bid or accept, earn on every delivery</p></div>
+        <div class="earr">›</div>
+      </div>
+      <div class="ecard" onclick="window.location.href='admin.html'">
+        <div class="eico ec">🛡️</div>
+        <div class="etxt"><h4>Admin Portal</h4><p>Manage users, payments, disputes &amp; analytics</p></div>
+        <div class="earr">›</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mbar">
+  <div class="minner">
+    <div class="met"><strong>1,240+</strong><span>Verified Trucks</span></div>
+    <div class="met"><strong>3,800+</strong><span>Loads Delivered</span></div>
+    <div class="met"><strong>98%</strong><span>On-time Rate</span></div>
+    <div class="met"><strong>14</strong><span>Cities Covered</span></div>
+    <div class="met"><strong>P2.4M</strong><span>Paid to Drivers</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     AUTH MODAL (Login / Register)
+══════════════════════════════════════ -->
+<div class="ov" id="aov">
+  <div class="modal">
+    <button class="mcl" onclick="closeAuth()">✕</button>
+    <div class="logo" style="font-size:1rem;margin-bottom:.85rem;">LoriBots</div>
+    <div class="mtabs">
+      <button class="mtab on" id="tl" onclick="swAuth('l')">Login</button>
+      <button class="mtab"    id="tr" onclick="swAuth('r')">Register</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="fl">
+      <div class="fg mb1"><label class="lbl">Email or Phone</label><input class="inp" placeholder="+267 or email"/></div>
+      <div class="fg mb1"><label class="lbl">Password</label><input class="inp" type="password" placeholder="••••••••"/></div>
+      <div class="fg mb2">
+        <label class="lbl">Login as</label>
+        <select class="sel" id="lr">
+          <option value="owner">Cargo Owner</option>
+          <option value="driver">Truck Driver</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <button class="btn ba w100 blg" onclick="doLogin()">Login →</button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="freg" class="hidden">
+      <div class="fg mb1">
+        <label class="lbl">I am a</label>
+        <select class="sel" id="rr" onchange="togReg()">
+          <option value="owner">Cargo Owner</option>
+          <option value="driver">Truck Driver</option>
+        </select>
+      </div>
+
+      <!-- Owner fields -->
+      <div id="of">
+        <div class="frow">
+          <div class="fg"><label class="lbl">Company Name</label><input class="inp" placeholder="Kgosi Freight Ltd."/></div>
+          <div class="fg"><label class="lbl">Contact Name</label><input class="inp" placeholder="Full name"/></div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label class="lbl">Phone</label><input class="inp" placeholder="+267 XX XXX XXX"/></div>
+          <div class="fg"><label class="lbl">City</label>
+            <select class="sel"><option>Gaborone</option><option>Francistown</option><option>Maun</option><option>Kasane</option><option>Lobatse</option><option>Selebi-Phikwe</option></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Driver fields -->
+      <div id="df" class="hidden">
+        <div class="frow">
+          <div class="fg"><label class="lbl">Full Name</label><input class="inp" placeholder="Full name"/></div>
+          <div class="fg"><label class="lbl">Omang / ID</label><input class="inp" placeholder="ID number"/></div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label class="lbl">Truck Type</label>
+            <select class="sel"><option>Flatbed</option><option>Refrigerated</option><option>Tanker</option><option>Curtainsider</option><option>Tipper</option></select>
+          </div>
+          <div class="fg"><label class="lbl">Capacity (T)</label><input class="inp" type="number" placeholder="e.g. 30"/></div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label class="lbl">License Plate</label><input class="inp" placeholder="B 123 ABC"/></div>
+          <div class="fg"><label class="lbl">Base City</label>
+            <select class="sel"><option>Gaborone</option><option>Francistown</option><option>Maun</option><option>Kasane</option></select>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label class="lbl">Driver's License</label><div class="fup" onclick="fakeUp(this)">📄 Upload PDF/JPG</div></div>
+          <div class="fg"><label class="lbl">Permit Docs</label><div class="fup" onclick="fakeUp(this)">📄 Upload PDF/JPG</div></div>
+        </div>
+      </div>
+
+      <div class="frow">
+        <div class="fg"><label class="lbl">Email</label><input class="inp" placeholder="email@example.com"/></div>
+        <div class="fg"><label class="lbl">Password</label><input class="inp" type="password" placeholder="••••••••"/></div>
+      </div>
+      <button class="btn ba w100 blg mt1" onclick="proceedPay()">Continue to Payment →</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="shared.js"></script>
+<script>
+  /* ── AUTH ── */
+  function openAuth(mode, preset) {
+    document.getElementById('aov').classList.add('open');
+    swAuth(mode === 'register' ? 'r' : 'l');
+    if (preset) { document.getElementById('rr').value = preset; togReg(); }
+  }
+  function closeAuth() { document.getElementById('aov').classList.remove('open'); }
+
+  function swAuth(t) {
+    document.getElementById('fl').classList.toggle('hidden', t !== 'l');
+    document.getElementById('freg').classList.toggle('hidden', t !== 'r');
+    document.getElementById('tl').classList.toggle('on', t === 'l');
+    document.getElementById('tr').classList.toggle('on', t === 'r');
+  }
+
+  function togReg() {
+    const r = document.getElementById('rr').value;
+    document.getElementById('of').classList.toggle('hidden', r !== 'owner');
+    document.getElementById('df').classList.toggle('hidden', r !== 'driver');
+  }
+
+  function doLogin() {
+    const role = document.getElementById('lr').value;
+    closeAuth();
+    /* Redirect to the correct dashboard */
+    if (role === 'admin')  window.location.href = 'admin.html';
+    if (role === 'driver') window.location.href = 'driver.html';
+    if (role === 'owner')  window.location.href = 'cargo-owner.html';
+  }
+
+  function proceedPay() {
+    const role = document.getElementById('rr').value;
+    /* Pass the role to the payment page via URL parameter */
+    closeAuth();
+    window.location.href = `payment.html?role=${role}`;
+  }
+</script>
+</body>
+</html>
