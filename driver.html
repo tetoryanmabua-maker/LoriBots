@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>LoriBots – Driver Dashboard</title>
+  <script>/* Prevent theme flash on load */
+(function(){var t=localStorage.getItem('lb-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body style="overflow:hidden;">
+
+<div style="display:flex;flex-direction:column;height:100vh;">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="flex ac gap1">
+      <div class="tlogo">LoriBots <em>Platform</em></div>
+      <span class="bdg bgb">Truck Driver</span>
+    </div>
+    <div class="tright">
+      <button class="thbtn" onclick="toggleTheme()">🌙 Dark Mode</button>
+      <div class="upill"><div class="udot"></div><span>Driver</span></div>
+      <button class="btn bgh bsm" onclick="window.location.href='index.html'">Logout</button>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sb">
+      <div class="sbsec">Jobs</div>
+      <button class="sbi on" onclick="navTo('browse',this)"><span class="sbico">⊡</span>Browse Jobs</button>
+      <button class="sbi" onclick="navTo('bids',this)"><span class="sbico">◪</span>My Bids</button>
+      <button class="sbi" onclick="navTo('active',this)"><span class="sbico">▷</span>Active Job</button>
+
+      <div class="sbsec">Account</div>
+      <button class="sbi" onclick="navTo('earnings',this)"><span class="sbico">◈</span>Earnings</button>
+      <button class="sbi" onclick="navTo('chat',this)"><span class="sbico">◈</span>Messages</button>
+      <button class="sbi" onclick="navTo('notifs',this)"><span class="sbico">◻</span>Notifications</button>
+
+      <div class="sbft"><div class="xs mu">LoriBots v2.0 · 2026</div></div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="ct" id="ct"></main>
+  </div>
+</div>
+
+<!-- BID MODAL -->
+<div class="ov" id="bov">
+  <div class="modal">
+    <button class="mcl" onclick="document.getElementById('bov').classList.remove('open')">✕</button>
+    <div class="b s mb1">Place a Bid</div>
+    <div class="xs mu mb2">Job <span id="bid-id" class="am b"></span> · Listed: <span id="bid-listed" class="am b"></span></div>
+    <div class="fg mb1"><label class="lbl">Your Bid (BWP)</label><input class="inp" type="number" placeholder="e.g. 4,800"/></div>
+    <div class="fg mb2"><label class="lbl">Message to Owner</label>
+      <textarea class="ta" placeholder="Availability, truck details, experience…" style="min-height:50px;"></textarea>
+    </div>
+    <button class="btn ba w100" onclick="submitBid()">Submit Bid →</button>
+  </div>
+</div>
+
+<!-- PROOF OF DELIVERY MODAL -->
+<div class="ov" id="pfov">
+  <div class="modal">
+    <button class="mcl" onclick="document.getElementById('pfov').classList.remove('open')">✕</button>
+    <div class="b s mb1">Proof of Delivery</div>
+    <div class="xs mu mb2">Job #1043 · Diesel Fuel · Lobatse → Kasane</div>
+    <div class="fup mb2" onclick="fakeUp(this)" style="padding:1.2rem;">📸 Click to upload delivery photo (JPG/PNG)</div>
+    <div class="fg mb2"><label class="lbl">Receiver's Name</label><input class="inp" placeholder="Name of person who signed off"/></div>
+    <button class="btn bg_ w100" onclick="submitProof()">Confirm Delivery &amp; Release Payment</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="shared.js"></script>
+<script>
+
+  function navTo(page, btn) {
+    document.querySelectorAll('.sbi').forEach(b => b.classList.remove('on'));
+    if (btn) btn.classList.add('on');
+    document.getElementById('ct').innerHTML = pages[page] ? pages[page]() : '<p class="xs mu">Coming soon.</p>';
+  }
+
+  function openBid(id, price) {
+    document.getElementById('bid-id').textContent     = id;
+    document.getElementById('bid-listed').textContent = price;
+    document.getElementById('bov').classList.add('open');
+  }
+  function submitBid()   { document.getElementById('bov').classList.remove('open');  toast('Bid submitted! You\'ll be notified of the decision.'); }
+  function submitProof() { document.getElementById('pfov').classList.remove('open'); toast('Delivery confirmed! Payment releasing within 2 hours.'); }
+
+  const pages = {
+
+    /* ── BROWSE JOBS ── */
+    'browse': () => `
+      <div class="ph">
+        <div><div class="pt">Browse Jobs</div><div class="ps">Filter by location, cargo &amp; price</div></div>
+      </div>
+      <div class="flex gap1 mb1" style="flex-wrap:wrap;">
+        <select class="sel" style="flex:1;min-width:120px;"><option>📍 All Cities</option><option>Gaborone</option><option>Francistown</option><option>Maun</option><option>Kasane</option></select>
+        <select class="sel" style="flex:1;min-width:110px;"><option>All Cargo</option><option>General</option><option>Construction</option><option>Agricultural</option><option>Hazardous</option></select>
+        <select class="sel" style="flex:1;min-width:110px;"><option>All Trucks</option><option>Flatbed</option><option>Curtainsider</option><option>Tipper</option><option>Refrigerated</option><option>Tanker</option></select>
+        <select class="sel" style="flex:1;min-width:110px;"><option>Any Price</option><option>Under P3K</option><option>P3K–P8K</option><option>Over P8K</option></select>
+      </div>
+      ${[
+        {id:'#1039',c:'Maize Meal 15T',r:'Gaborone → Maun',ty:'Agricultural',tk:'Curtainsider',p:'P 5,500',m:'bid',bids:5,dt:'14 Apr'},
+        {id:'#1040',c:'Construction Sand 20T',r:'Gaborone → Jwaneng',ty:'Construction',tk:'Tipper',p:'P 3,200',m:'fixed',bids:0,dt:'15 Apr'},
+        {id:'#1041',c:'Household Goods 8T',r:'Francistown → Gaborone',ty:'General',tk:'Any',p:'P 2,800',m:'fixed',bids:0,dt:'13 Apr'},
+        {id:'#1043',c:'Diesel Fuel 30,000L',r:'Lobatse → Kasane',ty:'Hazardous',tk:'Tanker',p:'P 14,000',m:'bid',bids:2,dt:'16 Apr'},
+        {id:'#1044',c:'Beef Carcasses (Chilled)',r:'Maun → Gaborone',ty:'Agricultural',tk:'Refrigerated',p:'P 9,000',m:'bid',bids:1,dt:'17 Apr'},
+      ].map(j => `
+      <div class="jc_ flex ac jb gap2">
+        <div style="flex:1;min-width:0;">
+          <div class="flex ac gap1 mb1">
+            <span class="b xs">${j.c}</span>
+            <span class="bdg bgx">${j.ty}</span>
+            <span class="bdg ${j.m==='bid'?'bgb':'bga'}">${j.m==='bid'?'Open Bids':'Fixed'}</span>
+          </div>
+          <div class="xs mu">📍 ${j.r} · 🚛 ${j.tk} · 📅 ${j.dt}${j.m==='bid'?' · '+j.bids+' bids':''}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div class="b am">${j.p}</div>
+          <div class="flex gap1 mt1 jc">
+            ${j.m==='fixed'
+              ? `<button class="btn bg_ bsm" onclick="toast('Job accepted! Owner notified.')">Accept Job</button>`
+              : `<button class="btn ba bsm" onclick="openBid('${j.id}','${j.p}')">Place Bid</button>`}
+          </div>
+        </div>
+      </div>`).join('')}`,
+
+    /* ── MY BIDS ── */
+    'bids': () => `
+      <div class="ph">
+        <div><div class="pt">My Bids</div><div class="ps">Track bids and accepted jobs</div></div>
+      </div>
+      <div class="chips">
+        <button class="chip on" onclick="chip(this)">All</button>
+        <button class="chip" onclick="chip(this)">Pending</button>
+        <button class="chip" onclick="chip(this)">Accepted</button>
+        <button class="chip" onclick="chip(this)">Rejected</button>
+      </div>
+      ${[
+        {id:'#1039',c:'Maize Meal 15T',r:'GBR→MUN',b:'P 5,200',s:'pending'},
+        {id:'#1043',c:'Diesel Fuel',r:'LOB→KAS',b:'P 13,500',s:'accepted'},
+        {id:'#1038',c:'Steel Rods 12T',r:'FTN→GBR',b:'P 7,800',s:'rejected'},
+      ].map(j => `
+      <div class="jc_ flex ac jb gap2">
+        <div>
+          <div class="b xs">${j.c}</div>
+          <div class="xs mu">${j.id} · ${j.r} · Bid: <span class="am b">${j.b}</span></div>
+        </div>
+        <div class="flex ac gap1">
+          <span class="bdg ${j.s==='accepted'?'bgg':j.s==='rejected'?'bgr':'bga'}">
+            ${j.s==='accepted'?'✅ Accepted':j.s==='rejected'?'❌ Rejected':'⏳ Pending'}
+          </span>
+          ${j.s==='accepted' ? `<button class="btn bb bsm" onclick="navTo('active')">Start Job</button>` : ''}
+        </div>
+      </div>`).join('')}`,
+
+    /* ── ACTIVE JOB ── */
+    'active': () => `
+      <div class="ph">
+        <div><div class="pt">Active Job</div><div class="ps">Job #1043 · Diesel Fuel · Lobatse → Kasane</div></div>
+        <span class="bdg bgg">● In Progress</span>
+      </div>
+      <div class="g2">
+        <div>
+          ${mapWidget('Sharing live GPS · Lobatse → Kasane')}
+          <div class="card mt1">
+            <div class="g4 mb1">
+              <div><div class="xs mu">Route</div><div class="b xs">LOB→KAS</div></div>
+              <div><div class="xs mu">Distance</div><div class="b xs">622 km</div></div>
+              <div><div class="xs mu">Cargo</div><div class="b xs">Diesel 30KL</div></div>
+              <div><div class="xs mu">Payout</div><div class="b xs gn">P 12,150</div></div>
+            </div>
+            <div class="flex gap1">
+              <button class="btn ba" onclick="document.getElementById('pfov').classList.add('open')">📸 Upload Proof of Delivery</button>
+              <button class="btn bgh bsm" onclick="navTo('chat')">💬 Chat Owner</button>
+            </div>
+          </div>
+        </div>
+        <div>${chatWidget('Kgosi Freight Ltd. (Owner)')}</div>
+      </div>`,
+
+    /* ── EARNINGS ── */
+    'earnings': () => `
+      <div class="ph">
+        <div><div class="pt">Earnings</div><div class="ps">Income dashboard &amp; payment history</div></div>
+        <button class="btn bgh bsm" onclick="toast('Exporting…')">Export PDF</button>
+      </div>
+      <div class="gkpi mb2">
+        ${kpi('P8,450','This Month','P1,200 vs last',true)}
+        ${kpi('P42K','All Time','',false)}
+        ${kpi('17','Jobs Done','3 this month',true)}
+        ${kpi('4.9★','Avg Rating','',false)}
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="b xs mb1">Monthly Earnings (BWP)</div>
+          ${barChart([4200,6800,5100,7200,8450,9100,6300,7800,8200,5600,9400,8100].map((v,i)=>({
+            v, l:['J','F','M','A','M','J','J','A','S','O','N','D'][i], mx:9400
+          })))}
+        </div>
+        <div class="card">
+          <div class="b xs mb1">Payment History</div>
+          ${[
+            ['Job #1043 Fuel Transport','Apr 10','P 12,150'],
+            ['Job #1038 Steel Rods','Apr 05','P 7,020'],
+            ['Job #1031 Maize Meal','Mar 28','P 4,950'],
+            ['Job #1025 Livestock','Mar 20','P 9,900'],
+          ].map(([j,d,a]) => `
+          <div class="rcr">
+            <div><div class="b xs">${j}</div><div class="xs mu">${d}</div></div>
+            <span class="b xs gn">${a}</span>
+          </div>`).join('')}
+        </div>
+      </div>`,
+
+    /* ── MESSAGES ── */
+    'chat': () => `
+      <div class="ph"><div class="pt">Messages</div></div>
+      ${chatWidget('Kgosi Freight Ltd. – Job #1043')}`,
+
+    /* ── NOTIFICATIONS ── */
+    'notifs': () => `
+      <div class="ph">
+        <div><div class="pt">Notifications</div></div>
+        <button class="btn bgh bsm" onclick="toast('All marked read.')">Mark all read</button>
+      </div>
+      ${notifList()}`,
+  };
+
+  /* ── LOAD DEFAULT PAGE ── */
+  navTo('browse');
+</script>
+</body>
+</html>
